@@ -1,0 +1,26 @@
+name: CI Databricks SQL Verification
+
+on:
+  push:
+    branches: [ "main", "feat/*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint-sql:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Codigo
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Instalar o Validador SQL (SQLFuff)
+        run: |
+          python-m pip install --upgrade pip
+          pip install sqlfluff dialect-sparksql
+
+      - name: Verificar erros de sintaxe SQL
+        run: |
+          sqlfluff lint . --dialect sparksql
