@@ -2,12 +2,12 @@ name: CI Databricks SQL Verification
 
 on:
   push:
-    branches: [ "main", "feature/*", "feat/*" ]
+    branches: [ "main", "feat/*" ]
   pull_request:
     branches: [ "main" ]
 
 env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   lint-sql:
@@ -24,7 +24,6 @@ jobs:
 
     - name: Instalar o Validador de SQL (SQLFluff)
       run: |
-        # Corrigido o espaço em 'python -m'
         python -m pip install --upgrade pip
         python -m pip install sqlfluff
 
