@@ -2,7 +2,7 @@ name: CI Databricks SQL Verification
 
 on:
   push:
-    branches: [ "main", "feat/*" ]
+    branches: [ "main", "feature/*", "feat/*" ]
   pull_request:
     branches: [ "main" ]
 
@@ -17,10 +17,11 @@ jobs:
     - name: Configurar o Python
       uses: actions/setup-python@v5.3.0
       with:
-        python-version: '3.13'
+        python-version: '3.11'
 
     - name: Instalar o Validador de SQL (SQLFluff)
       run: |
+        # Corrigido o espaço em 'python -m'
         python -m pip install --upgrade pip
         python -m pip install sqlfluff
 
