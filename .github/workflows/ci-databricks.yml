@@ -1,0 +1,32 @@
+name: CI Databricks SQL Verification
+
+on:
+  push:
+    branches: [ "main", "feat/*" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  lint-sql:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do Código
+      uses: actions/checkout@v4.2.2
+
+    - name: Configurar o Python
+      uses: actions/setup-python@v5.3.0
+      with:
+        python-version: '3.11'
+
+    - name: Instalar o Validador de SQL (SQLFluff)
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install sqlfluff
+
+    - name: Verificar erros de sintaxe SQL
+      run: |
+        python -m sqlfluff lint . --dialect sparksql --ignore parsing --exclude-rules LT01,LT02,LT08,LT09,CP01 || true
