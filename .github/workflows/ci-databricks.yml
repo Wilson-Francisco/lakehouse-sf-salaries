@@ -1,4 +1,4 @@
-name: CI Databricks SQL Verification
+name: CI Databricks SQL & Python Verification
 
 on:
   push:
@@ -10,7 +10,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  lint-sql:
+  lint-and-validate:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,11 +22,26 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Instalar o Validador de SQL (SQLFluff)
+    - name: Instalar Ferramentas de Verificação (SQL e Python)
       run: |
         python -m pip install --upgrade pip
-        python -m pip install sqlfluff
+        python -m pip install sqlfluff ruff
 
     - name: Verificar erros de sintaxe SQL
       run: |
         python -m sqlfluff lint . --dialect sparksql --ignore parsing --exclude-rules LT01,LT02,LT08,LT09,CP01 || true
+
+    - name: Verificar Qualidade do Código Python (Ruff Lint)
+      run: |
+        # O Ruff analisa erros de sintaxe, imports não usados e estilo no código Python
+        python -m ruff check . --ignore E501 || true
+
+    - name: Validar Instalação de Dependências (requirements.txt)
+      run: |
+        # Garante que as bibliotecas de ML (Pandas, Scikit-Learn, SciPy, etc.) estão instaláveis
+        if [ -f requirements.txt ]; then
+          python -m pip install -r requirements.txt --dry-run
+        else
+          echo "Nenhum arquivo requirements.txt encontrado. Pulando validação de pacotes."
+        fi
+
