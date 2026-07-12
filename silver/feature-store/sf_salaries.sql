@@ -55,5 +55,5 @@ SELECT
     END AS desvio_medio_salarial
 FROM base_desduplicada AS t1
 LEFT JOIN silver.sf_salaries.silver AS t2 
-  ON t1.IdEmployee = t2.IdEmployee 
-  AND t2.DateJob <= '{dt_ref}';
+ON t1.IdEmployee = t2.IdEmployee 
+AND t2.DateJob <= '{dt_ref}';
