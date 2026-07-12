@@ -23,7 +23,7 @@ SELECT
     t1.IdEmployee AS id_funcionario,
     t1.cargo,
     COUNT(t1.IdEmployee) OVER(PARTITION BY t1.cargo) AS total_funcionarios_cargo,
-    SUM(t2.TotalPay) OVER(PARTITION BY t1.cargo) AS salario_total,
+    t2.TotalPay AS salario_total,
     t2.TotalPayBenefits AS salario_total_beneficios,
     
     CASE 
